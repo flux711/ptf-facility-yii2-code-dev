@@ -16,25 +16,74 @@ use yii\rest\Controller;
 
 class FakeController extends Controller
 {
-	public function actionStack()
+	public function actionGetStacks()
 	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
 		$fakedetails = FakeStackDetail::find()->all();
 		foreach($fakedetails as $fakedetail) {
-			$fakedetail['image'] = $fakedetail->fakeStackImages;
+			$fakedetail['image'] = $fakedetail->image;
 		}
 		return $fakedetails;
 	}
 
-	public function actionImage()
+	public function actionGetStackById()
 	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$request = Yii::$app->request;
+
+		if (!$request->get('id'))
+			throw new \yii\web\BadRequestHttpException("Stack ID is missing!");
+
+		$fakedetail = FakeStackDetail::find()->where([
+			'fake_stack_detail_id' => $request->get('id')
+		])->one();
+
+		return $this->formatStackData($fakedetail);
+	}
+
+	public function actionGetImages()
+	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
 		$fakeimages = FakeStackImage::find()->all();
 		return $fakeimages;
 	}
 
-	public function actionCodepool()
+	public function actionGetImageById()
 	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$request = Yii::$app->request;
+
+		if (!$request->get('id'))
+			throw new \yii\web\BadRequestHttpException("Image ID is missing!");
+
+		$fakeimage = FakeStackImage::find()->where([
+			'fake_stack_image_id' => $request->get('id')
+		])->one();
+		return $fakeimage;
+	}
+
+	public function actionGetCodepools()
+	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
 		$codepools = FakeCodePool::find()->all();
 		return $codepools;
+	}
+
+	public function actionGetCodepoolById()
+	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$request = Yii::$app->request;
+
+		if (!$request->get('id'))
+			throw new \yii\web\BadRequestHttpException("Codepool ID is missing!");
+
+		$codepool = FakeCodePool::find()->where([
+			'fake_stack_detail_id' => $request->get('id')
+		])->one();
+		return $codepool;
 	}
 
 	public function actionAddStackDetail()
@@ -166,6 +215,19 @@ class FakeController extends Controller
 			return;
 		}
 		throw new \yii\web\BadRequestHttpException("Unable to edit codepool!");
+	}
+
+	private function formatStackData($stack)
+	{
+		$images = [];
+		foreach($stack->image as $image) {
+			array_push($images, $image);
+		}
+
+		$stack = array($stack);
+		$stack['images'] = [];
+		//array_merge($stack['images'], $images);
+		return $stack;
 	}
 
 }

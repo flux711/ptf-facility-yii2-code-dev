@@ -43,7 +43,7 @@ class FakeStackDetail extends FakeRecord
 		];
 	}
 
-	public function getFakeStackImages()
+	public function getImage()
 	{
 		return $this->hasMany(FakeStackImage::className(), ['fake_stack_detail_id' => 'fake_stack_detail_id']);
 	}

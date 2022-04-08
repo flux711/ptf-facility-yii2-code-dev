@@ -2,6 +2,7 @@
 
 namespace api\modules\fake\common\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 class FakeRecord extends ActiveRecord
