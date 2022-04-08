@@ -1,14 +1,13 @@
 <?php
 
-namespace api\modules\rhea\controllers;
+namespace api\modules\fake\controllers;
 
-use api\modules\rhea\models\FakeCodePool;
-use api\modules\rhea\models\FakeCodePoolForm;
-use api\modules\rhea\models\FakeStackDetailForm;
-use api\modules\rhea\models\FakeStackImageForm;
-use api\modules\rhea\models\FakeStackDetail;
-use api\modules\rhea\models\FakeStackImage;
-use api\modules\rhea\models\RheaSettings;
+use api\modules\fake\models\FakeCodePool;
+use api\modules\fake\models\FakeCodePoolForm;
+use api\modules\fake\models\FakeStackDetailForm;
+use api\modules\fake\models\FakeStackImageForm;
+use api\modules\fake\models\FakeStackDetail;
+use api\modules\fake\models\FakeStackImage;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -17,144 +16,156 @@ use yii\rest\Controller;
 
 class FakeController extends Controller
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function behaviors()
+	public function actionStack()
 	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-				'rules' => [
-					// allow everything to users who meet the requirements of the hasAccess() method
-					[
-						'allow' => true,
-						'roles' => ['@'],
-						'matchCallback' => function() {
-							return self::hasAccess();
-						}
-					],
-					// everything else is denied
-				],
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'logout' => ['post'],
-				],
-			],
-		];
+		$fakedetails = FakeStackDetail::find()->all();
+		foreach($fakedetails as $fakedetail) {
+			$fakedetail['image'] = $fakedetail->fakeStackImages;
+		}
+		return $fakedetails;
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function actions()
+	public function actionImage()
 	{
-		return [
-			'error' => [
-				'class' => 'yii\web\ErrorAction',
-			],
-			'captcha' => [
-				'class' => 'yii\captcha\CaptchaAction',
-				'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-			],
-		];
+		$fakeimages = FakeStackImage::find()->all();
+		return $fakeimages;
+	}
+
+	public function actionCodepool()
+	{
+		$codepools = FakeCodePool::find()->all();
+		return $codepools;
 	}
 
 	public function actionAddStackDetail()
 	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$request = Yii::$app->request;
+
+		if (!$request->post('production_order_id'))
+			throw new \yii\web\BadRequestHttpException("Productionorder ID is missing!");
+		if (!$request->post('buck_sheet_id'))
+			throw new \yii\web\BadRequestHttpException("Bucksheet ID is missing!");
+		if (!$request->post('part_number'))
+			throw new \yii\web\BadRequestHttpException("Partnumber is missing!");
+
 		$model = new FakeStackDetailForm();
+
 		if ($model->load(Yii::$app->request->post())) {
 			$verification = $model->verify();
 			if ($verification)
-				Yii::$app->session->setFlash('error', $verification);
+				throw new \yii\web\BadRequestHttpException($verification);
 			if (!$verification and $model->create()) {
-				Yii::$app->session->setFlash('success', 'Stack added!');
-				return $this->redirect('/fake/stack');
+				Yii::$app->response->statusCode = 201;
+				return;
 			}
 		}
-
+		throw new \yii\web\BadRequestHttpException("Unable to add stack!");
 	}
 
 	public function actionEditStackDetail()
 	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$request = Yii::$app->request;
-		$id = $request->queryParams['id'];
-		$config = FakeStackDetail::findOne($id);
 
+		if (!$request->post('id'))
+			throw new \yii\web\BadRequestHttpException("Stack ID is missing!");
+
+		$config = FakeStackDetail::findOne($request->post('id'));
 		$model = new FakeStackDetailForm();
 
-		if ($request->post('FakeEditStackDetailForm') && $model->load($request->post()) && $model->update($config)) {
-			Yii::$app->session->setFlash('success', 'Stack updated!');
-			return $this->redirect('/fake/stack');
+		if ($model->load($request->post()) && $model->update($config)) {
+			Yii::$app->response->statusCode = 200;
+			return;
 		}
+		throw new \yii\web\BadRequestHttpException("Unable to edit stack!");
 	}
 
 	public function actionAddStackImage()
 	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$request = Yii::$app->request;
-		$id = $request->queryParams['id'];
-		$model = new FakeStackImageForm();
 
-		$model->fake_stack_detail_id = $id;
+		if (!$request->post('id'))
+			throw new \yii\web\BadRequestHttpException("Image ID is missing!");
+		if (!$request->post('part_number'))
+			throw new \yii\web\BadRequestHttpException("Partnumber is missing!");
+		if (!$request->post('reference'))
+			throw new \yii\web\BadRequestHttpException("Reference is missing!");
+
+		$model = new FakeStackImageForm();
+		$model->fake_stack_detail_id = $request->post('id');
+
 		if ($model->load($request->post())) {
 			$verification = $model->verify();
 			if ($verification)
-				Yii::$app->session->setFlash('error', $verification);
+				throw new \yii\web\BadRequestHttpException($verification);
 			if (!$verification and $model->create()) {
-				Yii::$app->session->setFlash('success', 'Stack image added!');
-				return $this->redirect('/fake/stack/'.$model->fake_stack_detail_id.'/image');
+				Yii::$app->response->statusCode = 201;
+				return;
 			}
 		}
+		throw new \yii\web\BadRequestHttpException("Unable to add image!");
 	}
 
 	public function actionEditStackImage()
 	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$request = Yii::$app->request;
-		$id = $request->queryParams['id'];
-		$config = FakeStackImage::findOne($id);
 
+		if (!$request->post('id'))
+			throw new \yii\web\BadRequestHttpException("Image ID is missing!");
+
+		$config = FakeStackImage::findOne($request->post('id'));
 		$model = new FakeStackImageForm();
 
-		if ($request->post('FakeStackImageForm') && $model->load($request->post()) && $model->update($config)) {
-			Yii::$app->session->setFlash('success', 'Stack image updated!');
-			return $this->redirect('/fake/stack/'.$config->fake_stack_detail_id.'/image');
+		if ($model->load($request->post()) && $model->update($config)) {
+			Yii::$app->response->statusCode = 200;
+			return;
 		}
-
+		throw new \yii\web\BadRequestHttpException("Unable to edit image!");
 	}
 
 	public function actionAddCodepool()
 	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$request = Yii::$app->request;
+
+		if (!$request->post('name'))
+			throw new \yii\web\BadRequestHttpException("Name is missing!");
+		if (!$request->post('regex'))
+			throw new \yii\web\BadRequestHttpException("Regex is missing!");
+
 		$model = new FakeCodePoolForm();
 
 		if ($model->load($request->post())) {
 			$verification = $model->verify();
 			if ($verification)
-				Yii::$app->session->setFlash('error', $verification);
+				throw new \yii\web\BadRequestHttpException($verification);
 			if (!$verification and $model->create()) {
-				Yii::$app->session->setFlash('success', 'Stack image added!');
-				return $this->redirect('/fake/codepool');
+				Yii::$app->response->statusCode = 201;
+				return;
 			}
 		}
-
+		throw new \yii\web\BadRequestHttpException("Unable to add codepool!");
 	}
 
 	public function actionEditCodepool()
 	{
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$request = Yii::$app->request;
-		$id = $request->queryParams['id'];
-		$config = FakeCodePool::findOne($id);
 
+		if (!$request->post('id'))
+			throw new \yii\web\BadRequestHttpException("Codepool ID is missing!");
+
+		$config = FakeCodePool::findOne($request->post('id'));
 		$model = new FakeCodePoolForm();
 
 		if ($request->post('FakeCodePoolForm') && $model->load($request->post()) && $model->update($config)) {
-			Yii::$app->session->setFlash('success', 'Code pool updated!');
-			return $this->redirect('/fake/codepool');
+			Yii::$app->response->statusCode = 200;
+			return;
 		}
-
-		return null;
+		throw new \yii\web\BadRequestHttpException("Unable to edit codepool!");
 	}
 
 }
