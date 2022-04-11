@@ -10,6 +10,8 @@ class FakeStackDetailForm extends Model
 	public $buck_sheet_id;
 	public $part_number;
 
+	const SCENARIO_CREATE = 'create';
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -17,15 +19,15 @@ class FakeStackDetailForm extends Model
 	{
 		return [
 			['production_order_id', 'trim'],
-			['production_order_id', 'required'],
+			['production_order_id', 'required', 'on' => self::SCENARIO_CREATE],
 			['production_order_id', 'string', 'min' => 2, 'max' => 10],
 
 			['buck_sheet_id', 'trim'],
-			['buck_sheet_id', 'required'],
+			['buck_sheet_id', 'required', 'on' => self::SCENARIO_CREATE],
 			['buck_sheet_id', 'string', 'min' => 2, 'max' => 10],
 
 			['part_number', 'trim'],
-			['part_number', 'required'],
+			['part_number', 'required', 'on' => self::SCENARIO_CREATE],
 			['part_number', 'string', 'min' => 2, 'max' => 250],
 		];
 	}
@@ -76,9 +78,10 @@ class FakeStackDetailForm extends Model
 			return false;
 		}
 
-		$config->production_order_id = $this->production_order_id;
-		$config->buck_sheet_id = $this->buck_sheet_id;
-		$config->part_number = $this->part_number;
+		$config->production_order_id = $this->production_order_id ?: $config->production_order_id;
+		$config->buck_sheet_id = $this->buck_sheet_id ?: $config->buck_sheet_id;
+		$config->part_number = $this->part_number ?: $config->part_number;
+
 		return $config->save();
 	}
 

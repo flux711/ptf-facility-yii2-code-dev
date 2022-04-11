@@ -9,6 +9,8 @@ class FakeCodePoolForm extends Model
 	public $name;
 	public $regex;
 
+	const SCENARIO_CREATE = 'create';
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -16,11 +18,11 @@ class FakeCodePoolForm extends Model
 	{
 		return [
 			['name', 'trim'],
-			['name', 'required'],
+			['name', 'required', 'on' => self::SCENARIO_CREATE],
 			['name', 'string', 'min' => 1, 'max' => 100],
 
 			['regex', 'trim'],
-			['regex', 'required'],
+			['regex', 'required', 'on' => self::SCENARIO_CREATE],
 			['regex', 'string', 'min' => 1, 'max' => 100],
 		];
 	}
@@ -70,8 +72,8 @@ class FakeCodePoolForm extends Model
 			return false;
 		}
 
-		$config->name = $this->name;
-		$config->regex = $this->regex;
+		$config->name = $this->name ?: $config->name;
+		$config->regex = $this->regex ?: $config->regex;
 		return $config->save();
 	}
 

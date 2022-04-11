@@ -10,6 +10,8 @@ class FakeStackImageForm extends Model
 	public $part_number;
 	public $reference;
 
+	const SCENARIO_CREATE = 'create';
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -17,7 +19,7 @@ class FakeStackImageForm extends Model
 	{
 		return [
 			['fake_stack_detail_id', 'trim'],
-			['fake_stack_detail_id', 'required'],
+			['fake_stack_detail_id', 'required', 'on' => self::SCENARIO_CREATE],
 			['fake_stack_detail_id', 'integer', 'min' => 1, 'max' => 10],
 			['fake_stack_detail_id', 'exist',
 				'targetClass' => FakeStackDetail::class,
@@ -26,11 +28,11 @@ class FakeStackImageForm extends Model
 			],
 
 			['part_number', 'trim'],
-			['part_number', 'required'],
+			['part_number', 'required', 'on' => self::SCENARIO_CREATE],
 			['part_number', 'string', 'min' => 2, 'max' => 250],
 
 			['reference', 'trim'],
-			['reference', 'required'],
+			['reference', 'required', 'on' => self::SCENARIO_CREATE],
 			['reference', 'string', 'min' => 2, 'max' => 50],
 		];
 	}
@@ -83,8 +85,8 @@ class FakeStackImageForm extends Model
 			return false;
 		}
 
-		$config->part_number = $this->part_number;
-		$config->reference = $this->reference;
+		$config->part_number = $this->part_number ?: $config->part_number;
+		$config->reference = $this->reference ?: $config->reference;
 		return $config->save();
 	}
 
