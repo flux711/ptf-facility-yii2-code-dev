@@ -24,7 +24,7 @@
   },
   "autoload": {
     "psr-4": {
-      "flux711\\yii2\\ptf-facility_code_dev\\": ""
+      "flux711\\yii2\\facility_code_dev\\": ""
     }
   }
 }
