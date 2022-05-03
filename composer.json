@@ -1,5 +1,5 @@
 {
-  "name": "flux711/ptf-facility-code-dev",
+  "name": "flux711/facility-code-dev",
   "description": "Facility data extension for rhea",
   "keywords": [
     "yii2",
@@ -24,7 +24,7 @@
   },
   "autoload": {
     "psr-4": {
-      "flux711\\yii2\\facility_code_dev\\": ""
+      "flux711\\yii2\\ptf-facility_code_dev\\": ""
     }
   }
 }
