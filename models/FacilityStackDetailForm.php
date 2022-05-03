@@ -1,10 +1,10 @@
 <?php
 
-namespace api\modules\fake\models;
+namespace api\modules\facility\models;
 
 use yii\base\Model;
 
-class FakeStackDetailForm extends Model
+class FacilityStackDetailForm extends Model
 {
 	public $production_order_id;
 	public $buck_sheet_id;
@@ -43,23 +43,23 @@ class FakeStackDetailForm extends Model
 			return "Input validation failed!";
 		}
 
-		$stackdetail = FakeStackDetail::find()->where([
+		$stackdetail = FacilityStackDetail::find()->where([
 			'buck_sheet_id' => $this->buck_sheet_id,
 		])->one();
 		if ($stackdetail != null)
-			return "A fake stack for this bucksheet already exists";
+			return "A facility stack for this bucksheet already exists";
 
 		return null;
 	}
 
 	/**
-	 * Adds a new fake stack detail.
+	 * Adds a new facility stack detail.
 	 *
 	 * @return bool whether the creating was successful or not
 	 */
 	public function create()
 	{
-		$stackdetail = new FakeStackDetail();
+		$stackdetail = new FacilityStackDetail();
 		$stackdetail->production_order_id = $this->production_order_id;
 		$stackdetail->buck_sheet_id = $this->buck_sheet_id;
 		$stackdetail->part_number = $this->part_number;
@@ -68,7 +68,7 @@ class FakeStackDetailForm extends Model
 	}
 
 	/**
-	 * Updates an existing fake stack detail.
+	 * Updates an existing facility stack detail.
 	 *
 	 * @return bool whether the update was successful or not
 	 */

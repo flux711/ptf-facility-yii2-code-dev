@@ -1,10 +1,10 @@
 <?php
 
-namespace api\modules\fake\models;
+namespace api\modules\facility\models;
 
 use yii\base\Model;
 
-class FakeCodePoolForm extends Model
+class FacilityCodePoolForm extends Model
 {
 	public $name;
 	public $regex;
@@ -38,7 +38,7 @@ class FakeCodePoolForm extends Model
 			return "Input validation failed!";
 		}
 
-		$codepool = FakeCodePool::find()->where([
+		$codepool = FacilityCodePool::find()->where([
 			'name' => $this->name
 		])->one();
 		if ($codepool)
@@ -48,13 +48,13 @@ class FakeCodePoolForm extends Model
 	}
 
 	/**
-	 * Adds a new fake codepool.
+	 * Adds a new facility codepool.
 	 *
 	 * @return bool whether the creating new account was successful and email was sent
 	 */
 	public function create()
 	{
-		$codepool = new FakeCodePool();
+		$codepool = new FacilityCodePool();
 		$codepool->name = $this->name;
 		$codepool->regex = $this->regex;
 
@@ -62,7 +62,7 @@ class FakeCodePoolForm extends Model
 	}
 
 	/**
-	 * Updates an existing fake codepool.
+	 * Updates an existing facility codepool.
 	 *
 	 * @return bool whether the creating was successfull or not
 	 */

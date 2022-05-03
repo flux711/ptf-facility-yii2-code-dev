@@ -1,12 +1,12 @@
 <?php
 
-namespace api\modules\fake\models;
+namespace api\modules\facility\models;
 
 use yii\base\Model;
 
-class FakeStackImageForm extends Model
+class FacilityStackImageForm extends Model
 {
-	public $fake_stack_detail_id;
+	public $facility_stack_detail_id;
 	public $part_number;
 	public $reference;
 
@@ -18,13 +18,13 @@ class FakeStackImageForm extends Model
 	public function rules()
 	{
 		return [
-			['fake_stack_detail_id', 'trim'],
-			['fake_stack_detail_id', 'required', 'on' => self::SCENARIO_CREATE],
-			['fake_stack_detail_id', 'integer', 'min' => 1, 'max' => 10],
-			['fake_stack_detail_id', 'exist',
-				'targetClass' => FakeStackDetail::class,
-				'targetAttribute' => ['fake_stack_detail_id' => 'fake_stack_detail_id'],
-				'message' => 'Fake stack detail ID {value} does not exist.'
+			['facility_stack_detail_id', 'trim'],
+			['facility_stack_detail_id', 'required', 'on' => self::SCENARIO_CREATE],
+			['facility_stack_detail_id', 'integer', 'min' => 1, 'max' => 10],
+			['facility_stack_detail_id', 'exist',
+				'targetClass' => FacilityStackDetail::class,
+				'targetAttribute' => ['facility_stack_detail_id' => 'facility_stack_detail_id'],
+				'message' => 'Facility stack detail ID {value} does not exist.'
 			],
 
 			['part_number', 'trim'],
@@ -48,13 +48,13 @@ class FakeStackImageForm extends Model
 			return "Input validation failed!";
 		}
 
-		$stackimage = FakeStackImage::find()->where(
+		$stackimage = FacilityStackImage::find()->where(
 			['and',
-				['fake_stack_detail_id' => $this->fake_stack_detail_id],
+				['facility_stack_detail_id' => $this->facility_stack_detail_id],
 				['part_number' => $this->part_number]
 			])->one();
 		if ($stackimage)
-			return "A fake image with part ".$this->part_number." already exists for this stack";
+			return "A facility image with part ".$this->part_number." already exists for this stack";
 
 		return null;
 	}
@@ -66,8 +66,8 @@ class FakeStackImageForm extends Model
 	 */
 	public function create()
 	{
-		$stackimage = new FakeStackImage();
-		$stackimage->fake_stack_detail_id = $this->fake_stack_detail_id;
+		$stackimage = new FacilityStackImage();
+		$stackimage->facility_stack_detail_id = $this->facility_stack_detail_id;
 		$stackimage->part_number = $this->part_number;
 		$stackimage->reference = $this->reference;
 
@@ -75,7 +75,7 @@ class FakeStackImageForm extends Model
 	}
 
 	/**
-	 * Adds a new fake stack detail.
+	 * Adds a new facility stack detail.
 	 *
 	 * @return bool whether the update was successful or not
 	 */
@@ -92,7 +92,7 @@ class FakeStackImageForm extends Model
 
 	public function setConfig($config)
 	{
-		$this->fake_stack_detail_id = $config->fake_stack_detail_id;
+		$this->facility_stack_detail_id = $config->facility_stack_detail_id;
 		$this->part_number = $config->part_number;
 		$this->reference = $config->reference;
 	}

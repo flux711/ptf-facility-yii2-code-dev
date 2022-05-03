@@ -1,31 +1,31 @@
 <?php
 
-namespace api\modules\fake\controllers;
+namespace api\modules\facility\controllers;
 
-use api\modules\fake\models\FakeCodePool;
-use api\modules\fake\models\FakeCodePoolForm;
-use api\modules\fake\models\FakeStackDetailForm;
-use api\modules\fake\models\FakeStackImageForm;
-use api\modules\fake\models\FakeStackDetail;
-use api\modules\fake\models\FakeStackImage;
+use api\modules\facility\models\FacilityCodePool;
+use api\modules\facility\models\FacilityCodePoolForm;
+use api\modules\facility\models\FacilityStackDetailForm;
+use api\modules\facility\models\FacilityStackImageForm;
+use api\modules\facility\models\FacilityStackDetail;
+use api\modules\facility\models\FacilityStackImage;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
-class FakeController extends Controller
+class FacilityController extends Controller
 {
 	public function actionGetStacks()
 	{
 		Yii::$app->response->format = Response::FORMAT_JSON;
 
-		$fakedetails = FakeStackDetail::find()->all();
+		$facilitydetails = FacilityStackDetail::find()->all();
 
-		for($i = 0; $i < sizeof($fakedetails); $i++) {
-			$fakedetails[$i] = $this->formatStackData($fakedetails[$i]);
+		for($i = 0; $i < sizeof($facilitydetails); $i++) {
+			$facilitydetails[$i] = $this->formatStackData($facilitydetails[$i]);
 		}
-		return $fakedetails;
+		return $facilitydetails;
 	}
 
 	public function actionGetStackById()
@@ -36,19 +36,19 @@ class FakeController extends Controller
 		if (!$request->get('id'))
 			throw new BadRequestHttpException("Stack ID is missing!");
 
-		$fakedetail = FakeStackDetail::find()->where([
-			'fake_stack_detail_id' => $request->get('id')
+		$facilitydetail = FacilityStackDetail::find()->where([
+			'facility_stack_detail_id' => $request->get('id')
 		])->one();
 
-		return $this->formatStackData($fakedetail);
+		return $this->formatStackData($facilitydetail);
 	}
 
 	public function actionGetImages()
 	{
 		Yii::$app->response->format = Response::FORMAT_JSON;
 
-		$fakeimages = FakeStackImage::find()->all();
-		return $fakeimages;
+		$facilityimages = FacilityStackImage::find()->all();
+		return $facilityimages;
 	}
 
 	public function actionGetImageById()
@@ -59,17 +59,17 @@ class FakeController extends Controller
 		if (!$request->get('id'))
 			throw new BadRequestHttpException("Image ID is missing!");
 
-		$fakeimage = FakeStackImage::find()->where([
-			'fake_stack_image_id' => $request->get('id')
+		$facilityimage = FacilityStackImage::find()->where([
+			'facility_stack_image_id' => $request->get('id')
 		])->one();
-		return $fakeimage;
+		return $facilityimage;
 	}
 
 	public function actionGetCodepools()
 	{
 		Yii::$app->response->format = Response::FORMAT_JSON;
 
-		$codepools = FakeCodePool::find()->all();
+		$codepools = FacilityCodePool::find()->all();
 		return $codepools;
 	}
 
@@ -81,8 +81,8 @@ class FakeController extends Controller
 		if (!$request->get('id'))
 			throw new BadRequestHttpException("Codepool ID is missing!");
 
-		$codepool = FakeCodePool::find()->where([
-			'fake_stack_detail_id' => $request->get('id')
+		$codepool = FacilityCodePool::find()->where([
+			'facility_stack_detail_id' => $request->get('id')
 		])->one();
 		return $codepool;
 	}
@@ -99,10 +99,10 @@ class FakeController extends Controller
 		if (!$request->post('part_number'))
 			throw new BadRequestHttpException("Partnumber is missing!");
 
-		$model = new FakeStackDetailForm();
+		$model = new FacilityStackDetailForm();
 
 		if ($model->load($request->post(), '')) {
-			$model->scenario = FakeStackDetailForm::SCENARIO_CREATE;
+			$model->scenario = FacilityStackDetailForm::SCENARIO_CREATE;
 			$verification = $model->verify();
 			if ($verification)
 				throw new BadRequestHttpException($verification);
@@ -122,8 +122,8 @@ class FakeController extends Controller
 		if (!$request->queryParams['id'])
 			throw new BadRequestHttpException("Stack ID is missing!");
 
-		$config = FakeStackDetail::findOne($request->queryParams['id']);
-		$model = new FakeStackDetailForm();
+		$config = FacilityStackDetail::findOne($request->queryParams['id']);
+		$model = new FacilityStackDetailForm();
 
 		if ($model->load($request->bodyParams, '') && $model->update($config)) {
 			Yii::$app->response->statusCode = 200;
@@ -144,11 +144,11 @@ class FakeController extends Controller
 		if (!$request->post('reference'))
 			throw new BadRequestHttpException("Reference is missing!");
 
-		$model = new FakeStackImageForm();
-		$model->fake_stack_detail_id = $request->post('id');
+		$model = new FacilityStackImageForm();
+		$model->facility_stack_detail_id = $request->post('id');
 
 		if ($model->load($request->post(), '')) {
-			$model->scenario = FakeStackImageForm::SCENARIO_CREATE;
+			$model->scenario = FacilityStackImageForm::SCENARIO_CREATE;
 			$verification = $model->verify();
 			if ($verification)
 				throw new BadRequestHttpException($verification);
@@ -168,8 +168,8 @@ class FakeController extends Controller
 		if (!$request->queryParams['id'])
 			throw new BadRequestHttpException("Image ID is missing!");
 
-		$config = FakeStackImage::findOne($request->queryParams['id']);
-		$model = new FakeStackImageForm();
+		$config = FacilityStackImage::findOne($request->queryParams['id']);
+		$model = new FacilityStackImageForm();
 
 		if ($model->load($request->bodyParams, '') && $model->update($config)) {
 			Yii::$app->response->statusCode = 200;
@@ -188,10 +188,10 @@ class FakeController extends Controller
 		if (!$request->post('regex'))
 			throw new BadRequestHttpException("Regex is missing!");
 
-		$model = new FakeCodePoolForm();
+		$model = new FacilityCodePoolForm();
 
 		if ($model->load($request->post(), '')) {
-			$model->scenario = FakeCodePoolForm::SCENARIO_CREATE;
+			$model->scenario = FacilityCodePoolForm::SCENARIO_CREATE;
 			$verification = $model->verify();
 			if ($verification)
 				throw new BadRequestHttpException($verification);
@@ -211,8 +211,8 @@ class FakeController extends Controller
 		if (!$request->queryParams['id'])
 			throw new BadRequestHttpException("Codepool ID is missing!");
 
-		$config = FakeCodePool::findOne($request->queryParams['id']);
-		$model = new FakeCodePoolForm();
+		$config = FacilityCodePool::findOne($request->queryParams['id']);
+		$model = new FacilityCodePoolForm();
 
 		if ($model->load($request->bodyParams, '') && $model->update($config)) {
 			Yii::$app->response->statusCode = 200;

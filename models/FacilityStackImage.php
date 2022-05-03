@@ -1,15 +1,15 @@
 <?php
 
-namespace api\modules\fake\models;
+namespace api\modules\facility\models;
 
-use api\modules\fake\common\models\FakeRecord;
+use api\modules\facility\common\models\FacilityRecord;
 use Yii;
 
-class FakeStackImage extends FakeRecord
+class FacilityStackImage extends FacilityRecord
 {
 	public static function tableName()
 	{
-		return 'fake_stack_image';
+		return 'facility_stack_image';
 	}
 
 	public function rules()
@@ -42,9 +42,9 @@ class FakeStackImage extends FakeRecord
 	public function attributeLabels()
 	{
 		return [
-			'fake_stack_image_id' => 'Fake Stack Image ID',
-			'part_number' => 'Fake Stack Image Part Number',
-			'reference' => 'Fake Stack Image Reference',
+			'facility_stack_image_id' => 'Facility Stack Image ID',
+			'part_number' => 'Facility Stack Image Part Number',
+			'reference' => 'Facility Stack Image Reference',
 		];
 	}
 }

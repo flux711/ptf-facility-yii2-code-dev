@@ -1,6 +1,6 @@
 <?php
 
-namespace api\modules\fake\controllers;
+namespace api\modules\facility\controllers;
 
 use Yii;
 use yii\filters\AccessControl;

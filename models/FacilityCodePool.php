@@ -1,15 +1,15 @@
 <?php
 
-namespace api\modules\fake\models;
+namespace api\modules\facility\models;
 
-use api\modules\fake\common\models\FakeRecord;
+use api\modules\facility\common\models\FacilityRecord;
 use Yii;
 
-class FakeCodePool extends FakeRecord
+class FacilityCodePool extends FacilityRecord
 {
 	public static function tableName()
 	{
-		return 'fake_code_pool';
+		return 'facility_code_pool';
 	}
 
 	public function rules()
@@ -36,7 +36,7 @@ class FakeCodePool extends FakeRecord
 	public function attributeLabels()
 	{
 		return [
-			'fake_code_pool_id' => 'Fake Code Pool ID',
+			'facility_code_pool_id' => 'Facility Code Pool ID',
 			'name' => 'Code name',
 			'regex' => 'Code regex',
 		];

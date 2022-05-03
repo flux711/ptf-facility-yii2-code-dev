@@ -1,0 +1,30 @@
+{
+  "name": "flux711/facility-code-dev",
+  "description": "Facility data extension for rhea",
+  "keywords": [
+    "yii2",
+    "facility",
+    "extension",
+    "rhea"
+  ],
+  "homepage": "http://www.phytec.de/",
+  "type": "rhea-extension",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Frederik Lux",
+      "email": "f.lux@phytec.de"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.6.0",
+    "yiisoft/yii2": "~2.0.14",
+    "yiisoft/yii2-bootstrap4": "~2.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "flux711\\yii2\\facility_code_dev\\": ""
+    }
+  }
+}
