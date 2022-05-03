@@ -1,6 +1,6 @@
 <?php
 
-namespace flux711\yii2\rest_api_doc;
+namespace flux711\yii2\facility_code_dev;
 
 class ModuleAsset extends \yii\web\AssetBundle
 {

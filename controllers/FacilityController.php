@@ -16,6 +16,13 @@ use yii\web\Response;
 
 class FacilityController extends Controller
 {
+	public function init()
+	{
+		$view = $this->getView();
+		\flux711\yii2\facility_code_dev\ModuleAsset::register($view);
+		parent::init();
+	}
+
 	public function actionGetStacks()
 	{
 		Yii::$app->response->format = Response::FORMAT_JSON;

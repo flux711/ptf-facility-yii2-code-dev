@@ -9,6 +9,13 @@ use yii\web\Controller;
 
 class SiteController extends Controller
 {
+	public function init()
+	{
+		$view = $this->getView();
+		\flux711\yii2\facility_code_dev\ModuleAsset::register($view);
+		parent::init();
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
