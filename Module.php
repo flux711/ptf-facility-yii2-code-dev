@@ -2,7 +2,7 @@
 
 namespace flux711\yii2\facility_code_dev;
 
-class Module extends \yii\base\Module
+class Module extends \yii\base\Module implements \yii\base\BootstrapInterface
 {
 
 	public $controllerNamespace = 'flux711\yii2\facility_code_dev\controllers';
