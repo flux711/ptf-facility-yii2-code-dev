@@ -6,7 +6,7 @@ use yii\bootstrap4\Html;
 use yii\bootstrap4\Progress;
 use yii\grid\GridView;
 
-$this->title = 'Fake Code Pool';
+$this->title = 'Facility Code Pool';
 ?>
 <div class="site-result">
 	<div class="body-content">
@@ -15,7 +15,7 @@ $this->title = 'Fake Code Pool';
 			echo yii\grid\GridView::widget([
 				'dataProvider' => $provider,
 				'columns' => [
-					'fake_code_pool_id',
+					'facility_code_pool_id',
 					'name',
 					'regex',
 					[
@@ -31,8 +31,8 @@ $this->title = 'Fake Code Pool';
 						'format' => 'raw',
 						'value' => function($provider) {
 							if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->hasDevelopmentPermission()) {
-								$id = $provider->fake_code_pool_id;
-								return Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit', ['fake/codepool/edit/'.$id], ['title' => 'edit', 'class' => 'btn btn-success']);
+								$id = $provider->facility_code_pool_id;
+								return Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit', ['facility/codepool/edit/'.$id], ['title' => 'edit', 'class' => 'btn btn-success']);
 							}
 							return "-";
 						},
@@ -45,7 +45,7 @@ $this->title = 'Fake Code Pool';
 			<div class="col-lg-12">
 				<?php
 				if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->hasDevelopmentPermission()) {
-					echo Html::a('<span class="glyphicon glyphicon-pencil"></span> Add', ['fake/codepool/add'], ['title' => 'add', 'class' => 'btn btn-success']);
+					echo Html::a('<span class="glyphicon glyphicon-pencil"></span> Add', ['facility/codepool/add'], ['title' => 'add', 'class' => 'btn btn-success']);
 				}
 				?>
 			</div>

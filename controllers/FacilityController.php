@@ -2,242 +2,236 @@
 
 namespace api\modules\facility\controllers;
 
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\rest\Controller;
 use api\modules\facility\models\FacilityCodePool;
 use api\modules\facility\models\FacilityCodePoolForm;
 use api\modules\facility\models\FacilityStackDetailForm;
 use api\modules\facility\models\FacilityStackImageForm;
 use api\modules\facility\models\FacilityStackDetail;
 use api\modules\facility\models\FacilityStackImage;
-use Yii;
-use yii\helpers\ArrayHelper;
-use yii\rest\Controller;
-use yii\web\BadRequestHttpException;
-use yii\web\Response;
 
 class FacilityController extends Controller
 {
-	public function init()
+	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors()
 	{
-		$view = $this->getView();
-		\flux711\yii2\facility_code_dev\ModuleAsset::register($view);
-		parent::init();
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+				'rules' => [
+					// allow everything to users who meet the requirements of the hasAccess() method
+					[
+						'allow' => true,
+						'roles' => ['@'],
+						'matchCallback' => function() {
+							return self::hasAccess();
+						}
+					],
+					// everything else is denied
+				],
+			],
+			'verbs' => [
+				'class' => VerbFilter::className(),
+				'actions' => [
+					'logout' => ['post'],
+				],
+			],
+		];
 	}
 
-	public function actionGetStacks()
+	/**
+	 * {@inheritdoc}
+	 */
+	public function actions()
 	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
-
-		$facilitydetails = FacilityStackDetail::find()->all();
-
-		for($i = 0; $i < sizeof($facilitydetails); $i++) {
-			$facilitydetails[$i] = $this->formatStackData($facilitydetails[$i]);
-		}
-		return $facilitydetails;
+		return [
+			'error' => [
+				'class' => 'yii\web\ErrorAction',
+			],
+			'captcha' => [
+				'class' => 'yii\captcha\CaptchaAction',
+				'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+			],
+		];
 	}
 
-	public function actionGetStackById()
+	public static function hasAccess()
 	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
+		return !Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->hasDevelopmentPermission();
+	}
+
+	/**
+	 * Displays homepage.
+	 *
+	 * @return mixed
+	 */
+	public function actionIndex()
+	{
+		return $this->render('index');
+	}
+
+	public function actionStack()
+	{
+		$payload = [];
+		$query = FacilityStackDetail::find();
+		$provider = new ActiveDataProvider([
+			'query' => $query,
+			'pagination' => [
+				'pageSize' => 20,
+			],
+		]);
+		$payload['provider'] = $provider;
+
+		return $this->render('stack', $payload);
+	}
+
+	public function actionImage()
+	{
 		$request = Yii::$app->request;
+		$id = $request->queryParams['id'];
 
-		if (!$request->get('id'))
-			throw new BadRequestHttpException("Stack ID is missing!");
+		$query = FacilityStackImage::find();
+		$provider = new ActiveDataProvider([
+			'query' => $query->filterWhere(
+				['facility_stack_detail_id' => $id]
+			),
+			'pagination' => [
+				'pageSize' => 20,
+			],
+		]);
+		$payload['provider'] = $provider;
+		$payload['facility_stack_detail_id'] = $id;
 
-		$facilitydetail = FacilityStackDetail::find()->where([
-			'facility_stack_detail_id' => $request->get('id')
-		])->one();
-
-		return $this->formatStackData($facilitydetail);
+		return $this->render('image', $payload);
 	}
 
-	public function actionGetImages()
+	public function actionCodepool()
 	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
+		$query = FacilityCodePool::find();
+		$provider = new ActiveDataProvider([
+			'query' => $query,
+			'pagination' => [
+				'pageSize' => 20,
+			],
+		]);
+		$payload['provider'] = $provider;
 
-		$facilityimages = FacilityStackImage::find()->all();
-		return $facilityimages;
+		return $this->render('code', $payload);
 	}
 
-	public function actionGetImageById()
-	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
-		$request = Yii::$app->request;
-
-		if (!$request->get('id'))
-			throw new BadRequestHttpException("Image ID is missing!");
-
-		$facilityimage = FacilityStackImage::find()->where([
-			'facility_stack_image_id' => $request->get('id')
-		])->one();
-		return $facilityimage;
-	}
-
-	public function actionGetCodepools()
-	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
-
-		$codepools = FacilityCodePool::find()->all();
-		return $codepools;
-	}
-
-	public function actionGetCodepoolById()
-	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
-		$request = Yii::$app->request;
-
-		if (!$request->get('id'))
-			throw new BadRequestHttpException("Codepool ID is missing!");
-
-		$codepool = FacilityCodePool::find()->where([
-			'facility_stack_detail_id' => $request->get('id')
-		])->one();
-		return $codepool;
-	}
 
 	public function actionAddStackDetail()
 	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
-		$request = Yii::$app->request;
-
-		if (!$request->post('production_order_id'))
-			throw new BadRequestHttpException("Productionorder ID is missing!");
-		if (!$request->post('buck_sheet_id'))
-			throw new BadRequestHttpException("Bucksheet ID is missing!");
-		if (!$request->post('part_number'))
-			throw new BadRequestHttpException("Partnumber is missing!");
-
 		$model = new FacilityStackDetailForm();
-
-		if ($model->load($request->post(), '')) {
-			$model->scenario = FacilityStackDetailForm::SCENARIO_CREATE;
+		if ($model->load(Yii::$app->request->post())) {
 			$verification = $model->verify();
 			if ($verification)
-				throw new BadRequestHttpException($verification);
+				Yii::$app->session->setFlash('error', $verification);
 			if (!$verification and $model->create()) {
-				Yii::$app->response->statusCode = 201;
-				return;
+				Yii::$app->session->setFlash('success', 'Stack added!');
+				return $this->redirect(['/facility/stack']);
 			}
 		}
-		throw new BadRequestHttpException("Unable to add stack!");
+
+		return $this->render('addStackDetail', ['model' => $model]);
 	}
 
 	public function actionEditStackDetail()
 	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
 		$request = Yii::$app->request;
+		$id = $request->queryParams['id'];
+		$config = FacilityStackDetail::findOne($id);
 
-		if (!$request->queryParams['id'])
-			throw new BadRequestHttpException("Stack ID is missing!");
-
-		$config = FacilityStackDetail::findOne($request->queryParams['id']);
 		$model = new FacilityStackDetailForm();
 
-		if ($model->load($request->bodyParams, '') && $model->update($config)) {
-			Yii::$app->response->statusCode = 200;
-			return;
+		if ($request->post('FacilityStackDetailForm') && $model->load($request->post()) && $model->update($config)) {
+			Yii::$app->session->setFlash('success', 'Stack updated!');
+			return $this->redirect(['/facility/stack']);
 		}
-		throw new BadRequestHttpException("Unable to edit stack!");
+
+		$model->setConfig($config);
+
+		return $this->render('editStackDetail', ['model' => $model]);
 	}
 
 	public function actionAddStackImage()
 	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
 		$request = Yii::$app->request;
-
-		if (!$request->post('id'))
-			throw new BadRequestHttpException("Image ID is missing!");
-		if (!$request->post('part_number'))
-			throw new BadRequestHttpException("Partnumber is missing!");
-		if (!$request->post('reference'))
-			throw new BadRequestHttpException("Reference is missing!");
-
+		$id = $request->queryParams['id'];
 		$model = new FacilityStackImageForm();
-		$model->facility_stack_detail_id = $request->post('id');
 
-		if ($model->load($request->post(), '')) {
-			$model->scenario = FacilityStackImageForm::SCENARIO_CREATE;
+		$model->facility_stack_detail_id = $id;
+		if ($model->load($request->post())) {
 			$verification = $model->verify();
 			if ($verification)
-				throw new BadRequestHttpException($verification);
+				Yii::$app->session->setFlash('error', $verification);
 			if (!$verification and $model->create()) {
-				Yii::$app->response->statusCode = 201;
-				return;
+				Yii::$app->session->setFlash('success', 'Stack image added!');
+				return $this->redirect(['/facility/stack/'.$model->facility_stack_detail_id.'/image']);
 			}
 		}
-		throw new BadRequestHttpException("Unable to add image!");
+
+		return $this->render('addStackImage', ['model' => $model]);
 	}
 
 	public function actionEditStackImage()
 	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
 		$request = Yii::$app->request;
+		$id = $request->queryParams['id'];
+		$config = FacilityStackImage::findOne($id);
 
-		if (!$request->queryParams['id'])
-			throw new BadRequestHttpException("Image ID is missing!");
-
-		$config = FacilityStackImage::findOne($request->queryParams['id']);
 		$model = new FacilityStackImageForm();
 
-		if ($model->load($request->bodyParams, '') && $model->update($config)) {
-			Yii::$app->response->statusCode = 200;
-			return;
+		if ($request->post('FacilityStackImageForm') && $model->load($request->post()) && $model->update($config)) {
+			Yii::$app->session->setFlash('success', 'Stack image updated!');
+			return $this->redirect(['/facility/stack/'.$config->facility_stack_detail_id.'/image']);
 		}
-		throw new BadRequestHttpException("Unable to edit image!");
+
+		$model->setConfig($config);
+
+		return $this->render('editStackImage', ['model' => $model, 'stackdetail' => $config]);
 	}
 
 	public function actionAddCodepool()
 	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
 		$request = Yii::$app->request;
-
-		if (!$request->post('name'))
-			throw new BadRequestHttpException("Name is missing!");
-		if (!$request->post('regex'))
-			throw new BadRequestHttpException("Regex is missing!");
-
 		$model = new FacilityCodePoolForm();
 
-		if ($model->load($request->post(), '')) {
-			$model->scenario = FacilityCodePoolForm::SCENARIO_CREATE;
+		if ($model->load($request->post())) {
 			$verification = $model->verify();
 			if ($verification)
-				throw new BadRequestHttpException($verification);
+				Yii::$app->session->setFlash('error', $verification);
 			if (!$verification and $model->create()) {
-				Yii::$app->response->statusCode = 201;
-				return;
+				Yii::$app->session->setFlash('success', 'Stack image added!');
+				return $this->redirect(['/facility/codepool']);
 			}
 		}
-		throw new BadRequestHttpException("Unable to add codepool!");
+
+		return $this->render('addCodepool', ['model' => $model]);
 	}
 
 	public function actionEditCodepool()
 	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
 		$request = Yii::$app->request;
+		$id = $request->queryParams['id'];
+		$config = FacilityCodePool::findOne($id);
 
-		if (!$request->queryParams['id'])
-			throw new BadRequestHttpException("Codepool ID is missing!");
-
-		$config = FacilityCodePool::findOne($request->queryParams['id']);
 		$model = new FacilityCodePoolForm();
 
-		if ($model->load($request->bodyParams, '') && $model->update($config)) {
-			Yii::$app->response->statusCode = 200;
-			return;
-		}
-		throw new BadRequestHttpException("Unable to edit codepool!");
-	}
-
-	private function formatStackData($stack)
-	{
-		$images = [];
-		foreach($stack->image as $image) {
-			array_push($images, $image);
+		if ($request->post('FacilityCodePoolForm') && $model->load($request->post()) && $model->update($config)) {
+			Yii::$app->session->setFlash('success', 'Code pool updated!');
+			return $this->redirect(['/facility/codepool']);
 		}
 
-		$stack = ArrayHelper::toArray($stack);
-		$stack['images'] = $images;
-		return $stack;
+		$model->setConfig($config);
+
+		return $this->render('editCodepool', ['model' => $model]);
 	}
 
 }

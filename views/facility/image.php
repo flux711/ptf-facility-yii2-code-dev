@@ -6,7 +6,7 @@ use yii\bootstrap4\Html;
 use yii\bootstrap4\Progress;
 use yii\grid\GridView;
 
-$this->title = 'Fake Stack Image';
+$this->title = 'Facility Stack Image';
 ?>
 <div class="site-result">
 	<div class="body-content">
@@ -30,8 +30,8 @@ $this->title = 'Fake Stack Image';
 						'format' => 'raw',
 						'value' => function($provider) {
 							if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->hasDevelopmentPermission()) {
-								$id = $provider->fake_stack_image_id;
-								return Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit', ['fake/image/edit/'.$id], ['title' => 'edit', 'class' => 'btn btn-success']);
+								$id = $provider->facility_stack_image_id;
+								return Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit', ['facility/image/edit/'.$id], ['title' => 'edit', 'class' => 'btn btn-success']);
 							}
 							return "-";
 						},
@@ -44,7 +44,7 @@ $this->title = 'Fake Stack Image';
 			<div class="col-lg-12">
 				<?php
 				if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->hasDevelopmentPermission()) {
-					echo Html::a('<span class="glyphicon glyphicon-pencil"></span> Add', ['fake/stack/'.$fake_stack_detail_id.'/image/add'], ['title' => 'add', 'class' => 'btn btn-success']);
+					echo Html::a('<span class="glyphicon glyphicon-pencil"></span> Add', ['facility/stack/'.$facility_stack_detail_id.'/image/add'], ['title' => 'add', 'class' => 'btn btn-success']);
 				}
 				?>
 			</div>

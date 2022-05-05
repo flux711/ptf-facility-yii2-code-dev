@@ -6,7 +6,7 @@ use yii\bootstrap4\Html;
 use yii\bootstrap4\Progress;
 use yii\grid\GridView;
 
-$this->title = 'Fake Stack Detail';
+$this->title = 'Facility Stack Detail';
 ?>
 <div class="site-result">
 	<div class="body-content">
@@ -30,8 +30,8 @@ $this->title = 'Fake Stack Detail';
 						'label' => 'Image(s)',
 						'format' => 'raw',
 						'value' => function($provider) {
-							$id = $provider->fake_stack_detail_id;
-							return Html::a(Html::submitButton('Go', ['class' => 'btn btn-primary']), ['fake/stack/'.$id.'/image'], ['title' => 'go to images', 'class' => 'profile-link']);
+							$id = $provider->facility_stack_detail_id;
+							return Html::a(Html::submitButton('Go', ['class' => 'btn btn-primary']), ['facility/stack/'.$id.'/image'], ['title' => 'go to images', 'class' => 'profile-link']);
 						},
 					],
 					[
@@ -39,8 +39,8 @@ $this->title = 'Fake Stack Detail';
 						'format' => 'raw',
 						'value' => function($provider) {
 							if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->hasDevelopmentPermission()) {
-								$id = $provider->fake_stack_detail_id;
-								return Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit', ['fake/stack/edit/'.$id], ['title' => 'edit', 'class' => 'btn btn-success']);
+								$id = $provider->facility_stack_detail_id;
+								return Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit', ['facility/stack/edit/'.$id], ['title' => 'edit', 'class' => 'btn btn-success']);
 							}
 							return "-";
 						},
@@ -53,7 +53,7 @@ $this->title = 'Fake Stack Detail';
 			<div class="col-lg-12">
 				<?php
 				if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->hasDevelopmentPermission()) {
-					echo Html::a('<span class="glyphicon glyphicon-pencil"></span> Add', ['fake/stack/add'], ['title' => 'add', 'class' => 'btn btn-success']);
+					echo Html::a('<span class="glyphicon glyphicon-pencil"></span> Add', ['facility/stack/add'], ['title' => 'add', 'class' => 'btn btn-success']);
 				}
 				?>
 			</div>
