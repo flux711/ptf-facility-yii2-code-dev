@@ -1,6 +1,6 @@
 <?php
 
-namespace api\modules\facility\models;
+namespace flux711\yii2\facility_code_dev\models;
 
 use yii\base\Model;
 

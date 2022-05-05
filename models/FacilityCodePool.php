@@ -1,8 +1,8 @@
 <?php
 
-namespace api\modules\facility\models;
+namespace flux711\yii2\facility_code_dev\models;
 
-use api\modules\facility\common\models\FacilityRecord;
+use flux711\yii2\facility_code_dev\common\models\FacilityRecord;
 use Yii;
 
 class FacilityCodePool extends FacilityRecord
