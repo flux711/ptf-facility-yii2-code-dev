@@ -10,8 +10,8 @@ class Module extends \yii\base\Module implements \yii\base\BootstrapInterface
 	public function bootstrap($app)
 	{
 		$app->getUrlManager()->addRules([
-			$this->id => $this->id.'/index',
-			$this->id.'/<controller:[\w\-]+>/<action:[\w\-]+>' => $this->id.'/<controller>/<action>',
+			$this->id => $this->id.'/facility/index',
+			'facility/<action:[\w\-]+>' => 'facility/facility/<action>'
 		], false);
 	}
 }
