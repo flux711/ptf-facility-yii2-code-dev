@@ -1,4 +1,4 @@
-CREATE TABLE `facility-dev`.`facility_code_pool` (
+CREATE TABLE `facility_code_pool` (
                                   `facility_code_pool_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
                                   `name`              VARCHAR(100) NOT NULL,
                                   `regex`             VARCHAR(100) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE `facility-dev`.`facility_code_pool` (
                                   PRIMARY KEY (`facility_code_pool_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `facility-dev`.`facility_stack_detail` (
+CREATE TABLE `facility_stack_detail` (
                                      `facility_stack_detail_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
                                      `production_order_id`  INT UNSIGNED NOT NULL,
                                      `buck_sheet_id`        INT UNSIGNED NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE `facility-dev`.`facility_stack_detail` (
                                      PRIMARY KEY (`facility_stack_detail_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `facility-dev`.`facility_stack_image` (
+CREATE TABLE `facility_stack_image` (
                                     `facility_stack_image_id`  INT UNSIGNED NOT NULL AUTO_INCREMENT,
                                     `facility_stack_detail_id` INT UNSIGNED NOT NULL,
                                     `part_number`          VARCHAR(250) NOT NULL,
