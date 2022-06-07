@@ -28,7 +28,7 @@ CREATE TABLE `facility_stack_image` (
                                     PRIMARY KEY (`facility_stack_image_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `facility-dev`.`facility_core_version` (
+CREATE TABLE `facility_core_version` (
                                 `facility_core_version_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
                                 `version`              VARCHAR(200) NOT NULL UNIQUE,
                                 `creation_date`        TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
