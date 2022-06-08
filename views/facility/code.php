@@ -32,7 +32,7 @@ $this->title = 'Facility Code Pool';
 						'value' => function($provider) {
 							if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->hasDevelopmentPermission()) {
 								$id = $provider->facility_code_pool_id;
-								return Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit', ['facility/codepool/edit/'.$id], ['title' => 'edit', 'class' => 'btn btn-success']);
+								return Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit', ['codepool/edit/'.$id], ['title' => 'edit', 'class' => 'btn btn-success']);
 							}
 							return "-";
 						},
@@ -45,7 +45,7 @@ $this->title = 'Facility Code Pool';
 			<div class="col-lg-12">
 				<?php
 				if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->hasDevelopmentPermission()) {
-					echo Html::a('<span class="glyphicon glyphicon-pencil"></span> Add', ['facility/codepool/add'], ['title' => 'add', 'class' => 'btn btn-success']);
+					echo Html::a('<span class="glyphicon glyphicon-pencil"></span> Add', ['codepool/add'], ['title' => 'add', 'class' => 'btn btn-success']);
 				}
 				?>
 			</div>

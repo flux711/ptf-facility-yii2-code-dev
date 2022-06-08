@@ -31,7 +31,7 @@ $this->title = 'Facility Stack Image';
 						'value' => function($provider) {
 							if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->hasDevelopmentPermission()) {
 								$id = $provider->facility_stack_image_id;
-								return Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit', ['facility/image/edit/'.$id], ['title' => 'edit', 'class' => 'btn btn-success']);
+								return Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit', ['image/edit/'.$id], ['title' => 'edit', 'class' => 'btn btn-success']);
 							}
 							return "-";
 						},
@@ -44,7 +44,7 @@ $this->title = 'Facility Stack Image';
 			<div class="col-lg-12">
 				<?php
 				if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->hasDevelopmentPermission()) {
-					echo Html::a('<span class="glyphicon glyphicon-pencil"></span> Add', ['facility/stack/'.$facility_stack_detail_id.'/image/add'], ['title' => 'add', 'class' => 'btn btn-success']);
+					echo Html::a('<span class="glyphicon glyphicon-pencil"></span> Add', ['stack/'.$facility_stack_detail_id.'/image/add'], ['title' => 'add', 'class' => 'btn btn-success']);
 				}
 				?>
 			</div>
