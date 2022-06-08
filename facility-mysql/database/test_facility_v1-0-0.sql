@@ -33,5 +33,5 @@ CREATE TABLE `facility_core_version` (
                                 `version`              VARCHAR(200) NOT NULL UNIQUE,
                                 `creation_date`        TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                                 `alteration_date`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-                                PRIMARY KEY (`core_version_id`)
+                                PRIMARY KEY (`facility_core_version_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
