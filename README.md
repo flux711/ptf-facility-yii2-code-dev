@@ -9,18 +9,14 @@ This repository handles the facility data which can be used to simulate ....
 
 ## Installing
 
-* Add into the require section of your composer.json file the following
-  string: ```"flux711/facility-code-dev": "dev-master" ```  
-  and update composer: ```composer update --ignore-platform-reqs```
+* Add into the require section of your composer.json file the following string: ```"flux711/facility-code-dev": "dev-master" ```and update composer: ```composer update --ignore-platform-reqs```
 
-* Go to your application config file inside the module section (e.g.
-  ptf-rhea-dev/rhea-web/code/rhea-yii2/api/config/main-local.php)  
-  and add the following to your config:
+* Go to your application config file inside the module section (e.g. ptf-rhea-dev/rhea-web/code/rhea-yii2/api/config/main-local.php) and add the following to your config:
 
 ```
 $config['bootstrap'][] = 'facility';
 $config['modules']['facility'] = [
-  'class' => 'flux711\yii2\facility-code-dev\Module',
+  'class' => 'flux711\yii2\facility_code_dev\Module',
   // uncomment the following to add your IP if you are not connecting from localhost.
   //'allowedIPs' => ['127.0.0.1', '::1'],
 ];
