@@ -20,7 +20,7 @@ This repository handles the facility data which can be used to simulate ....
 ```
 $config['bootstrap'][] = 'facility';
 $config['modules']['facility'] = [
-  'class' => 'flux711\yii2\facility-code-dev\Module',
+  'class' => 'flux711\yii2\facility_code_dev\Module',
   // uncomment the following to add your IP if you are not connecting from localhost.
   //'allowedIPs' => ['127.0.0.1', '::1'],
 ];
