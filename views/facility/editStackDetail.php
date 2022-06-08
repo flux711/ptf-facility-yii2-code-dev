@@ -5,8 +5,8 @@
 
 /* @var $model \common\models\LoginForm */
 
-use yii\bootstrap4\Html;
 use yii\bootstrap4\ActiveForm;
+use yii\bootstrap4\Html;
 
 $this->title = 'Edit '.$model->part_number;
 ?>
