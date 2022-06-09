@@ -22,16 +22,10 @@ $config['modules']['facility'] = [
 ];
 ```
 
-* Add the new database tables to your existing databse by executing either the script file with:
+* Add the new database tables to your existing databse by either executing them directly to your database or with the script file from your root directory:
 
 ```
 sh ./rhea-web/code/rhea-yii2/vendor/flux711/facility-code-dev/import-tables.sh 
-```
-
-**or** directly via the command line with:
-
-```
-sudo docker exec -i rhea_mysql_1 mysql -uroot -prhea1 rhea-dev < ./facility-mysql/database/.
 ```
 
 ## Usage
