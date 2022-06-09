@@ -1,8 +1,8 @@
 LOCK TABLES `facility_code_pool` WRITE;
-INSERT IGNORE INTO `facility_code_pool` VALUES (1, 'Phytec Seriennummern', '^S[0-9ABCDEF]{8}$', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT IGNORE INTO `facility_code_pool` VALUES (2, 'Phytec Mac adressen', '^502DF4[0-9ABCDEF]{6}$', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT IGNORE INTO `facility_code_pool` VALUES (3, 'Phytec Productionscodes', '^P[0-9]{8}$', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT IGNORE INTO `facility_code_pool` VALUES (4, 'Phytec Seriennummern (alt)', '^[0-9A-Z]{2}[0-9]{4}$', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT IGNORE INTO `facility_code_pool` VALUES (2, 'Phytec Seriennummern', '^S[0-9ABCDEF]{8}$', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT IGNORE INTO `facility_code_pool` VALUES (12, 'Phytec Mac adressen', '^502DF4[0-9ABCDEF]{6}$', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT IGNORE INTO `facility_code_pool` VALUES (22, 'Phytec Productionscodes', '^P[0-9]{8}$', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT IGNORE INTO `facility_code_pool` VALUES (82, 'Phytec Seriennummern (alt)', '^[0-9A-Z]{2}[0-9]{4}$', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 UNLOCK TABLES;
 
 LOCK TABLES `facility_stack_detail` WRITE;
