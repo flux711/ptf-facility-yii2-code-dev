@@ -14,6 +14,7 @@ INSERT IGNORE INTO `facility_stack_image` VALUES (1, 1, 'barebox.bin', '//U13-1'
 INSERT IGNORE INTO `facility_stack_image` VALUES (2, 1, 'zImage', '//U13-2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 UNLOCK TABLES;
 
-LOCK TABLES `facility_core_version` WRITE;
-INSERT IGNORE INTO `facility_core_version` VALUES (1, '1.0.0', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+LOCK TABLES `test_facility_version` WRITE;
+INSERT IGNORE INTO `test_facility_version` VALUES (1, '1.0.0', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT IGNORE INTO `test_facility_version` VALUES (1, '1.0.1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 UNLOCK TABLES;

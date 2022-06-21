@@ -31,11 +31,11 @@ CREATE TABLE IF NOT EXISTS `facility_stack_image`
     PRIMARY KEY (`facility_stack_image_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `facility_core_version`
+CREATE TABLE IF NOT EXISTS `test_facility_version`
 (
-    `facility_core_version_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `test_facility_version_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `version`                  VARCHAR(200)                        NOT NULL UNIQUE,
     `creation_date`            TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     `alteration_date`          TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-    PRIMARY KEY (`facility_core_version_id`)
+    PRIMARY KEY (`test_facility_version_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

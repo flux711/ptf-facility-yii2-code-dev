@@ -14,3 +14,7 @@ DROP TABLE `fake_stack_image`;
 DROP TABLE `fake_stack_detail`;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+UPDATE `rhea_settings`
+SET `setting_value` = 0
+WHERE `setting` = 'use_phptool';
