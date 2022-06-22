@@ -9,17 +9,15 @@ This repository handles the facility data which can be used to simulate ....
 
 ## Installing
 
-### Build
-
-Add into the **require** section of your composer.json file the following string: ```"flux711/facility-code-dev": "dev-master" ```and update composer: ```composer update --ignore-platform-reqs```
-
 ### Development System
 
 If you are using the development system all installing steps are already executed and you just have to execute the **.sql** scripts on your database. For further instuction just head to the Database section.
 
 ### Production System
 
-* Go to your application config file inside the module section (e.g. rhea-yii2/api/config/main-local.php) and add the following to your config to connect the project to your module:
+Add into the **require** section of your composer.json file the following string: ```"flux711/facility-code-dev": "dev-master" ```and update composer: ```composer update --ignore-platform-reqs```
+
+Go to your application config file inside the module section (e.g. rhea-yii2/api/config/main-local.php) and add the following to your config to connect the project to your module:
 
 ```
 $config['bootstrap'][] = 'facility';
@@ -29,7 +27,7 @@ $config['modules']['facility'] = [
   //'allowedIPs' => ['127.0.0.1', '::1'],
 ];
 ```
-* Also in the same file add the following to connect to the new database for the facility data (change username and password accordingly):
+Also in the same file add the following to connect to the new database for the facility data (change details accordingly):
 
 ```
 $config = [
