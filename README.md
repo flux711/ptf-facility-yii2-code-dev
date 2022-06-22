@@ -9,9 +9,17 @@ This repository handles the facility data which can be used to simulate ....
 
 ## Installing
 
-* Add into the require section of your composer.json file the following string: ```"flux711/facility-code-dev": "dev-master" ```and update composer: ```composer update --ignore-platform-reqs```
+### Build
 
-* Go to your application config file inside the module section (e.g. ptf-rhea-dev/rhea-web/code/rhea-yii2/api/config/main-local.php) and add the following to your config:
+Add into the **require** section of your composer.json file the following string: ```"flux711/facility-code-dev": "dev-master" ```and update composer: ```composer update --ignore-platform-reqs```
+
+### Development System
+
+If you are using the development system all installing steps are already executed and you just have to execute the **.sql** scripts on your database. For further instuction just head to the Database section.
+
+### Production System
+
+* Go to your application config file inside the module section (e.g. rhea-yii2/api/config/main-local.php) and add the following to your config to connect the project to your module:
 
 ```
 $config['bootstrap'][] = 'facility';
@@ -21,12 +29,25 @@ $config['modules']['facility'] = [
   //'allowedIPs' => ['127.0.0.1', '::1'],
 ];
 ```
-
-* Add the new database tables to your existing databse by either executing them directly to your database or with the script file from your root directory:
+* Also in the same file add the following to connect to the new database for the facility data (change username and password accordingly):
 
 ```
-sh ./rhea-web/code/rhea-yii2/vendor/flux711/facility-code-dev/import-tables.sh 
+$config = [
+'components' => [
+  'db_facility' => [
+    'class' => 'yii\db\Connection',
+      'dsn' => 'mysql:host=mysql;dbname=facility-dev',
+      'username' => 'root',
+      'password' => 'password',
+      'charset' => 'utf8',
+    ],
+  ],
+];
 ```
+
+### Database
+
+Add the new database tables to your existing databse by executing the **.sql**-files directly to your database.  You can find them under ```facility-mysql/database/*.sql``` in this project or via this link https://github.com/flux711/ptf-facility-yii2-code-dev/tree/master/facility-mysql/database
 
 ## Usage
 
