@@ -9,6 +9,6 @@ class FacilityRecord extends ActiveRecord
 {
 	public static function getDb()
 	{
-		return Yii::$app->db_facility;
+		return Yii::$app->db_testlog;
 	}
 }

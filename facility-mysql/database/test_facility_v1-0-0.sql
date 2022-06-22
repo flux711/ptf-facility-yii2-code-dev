@@ -1,6 +1,4 @@
-CREATE DATABASE IF NOT EXISTS `facility-dev`;
-
-CREATE TABLE IF NOT EXISTS `facility-dev`.`facility_code_pool`
+CREATE TABLE IF NOT EXISTS `facility_code_pool`
 (
     `facility_code_pool_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `name`                  VARCHAR(100)                        NOT NULL,
@@ -10,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `facility-dev`.`facility_code_pool`
     PRIMARY KEY (`facility_code_pool_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `facility-dev`.`facility_stack_detail`
+CREATE TABLE IF NOT EXISTS `facility_stack_detail`
 (
     `facility_stack_detail_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `production_order_id`      INT UNSIGNED NOT NULL,
@@ -21,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `facility-dev`.`facility_stack_detail`
     PRIMARY KEY (`facility_stack_detail_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `facility-dev`.`facility_stack_image`
+CREATE TABLE IF NOT EXISTS `facility_stack_image`
 (
     `facility_stack_image_id`  INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `facility_stack_detail_id` INT UNSIGNED NOT NULL,
@@ -29,11 +27,11 @@ CREATE TABLE IF NOT EXISTS `facility-dev`.`facility_stack_image`
     `reference`                VARCHAR(50)                         NOT NULL,
     `creation_date`            TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     `alteration_date`          TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (`facility_stack_detail_id`) REFERENCES `facility-dev`.`facility_stack_detail` (`facility_stack_detail_id`),
+    FOREIGN KEY (`facility_stack_detail_id`) REFERENCES `facility_stack_detail` (`facility_stack_detail_id`),
     PRIMARY KEY (`facility_stack_image_id`)
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `facility-dev`.`test_facility_version`
+CREATE TABLE IF NOT EXISTS `test_facility_version`
 (
     `test_facility_version_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `version`                  VARCHAR(200)                        NOT NULL UNIQUE,
