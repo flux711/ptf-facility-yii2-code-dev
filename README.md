@@ -15,7 +15,7 @@ If you are using the development system all installing steps are already execute
 
 ### Production System
 
-Add into the **require** section of your composer.json file the following string: ```"flux711/facility-code-dev": "dev-master" ```and update composer: ```composer update --ignore-platform-reqs```
+Add into the **require** section of your composer.json file the following string: ```"flux711/facility-code-dev": "dev-master" ```and update composer: ```sudo docker exec -it --user www-data rhea_web_1 composer update -d rhea-yii2```
 
 Go to your application config file inside the module section (e.g. rhea-yii2/api/config/main-local.php) and add the following to your config to connect the project to your module:
 
