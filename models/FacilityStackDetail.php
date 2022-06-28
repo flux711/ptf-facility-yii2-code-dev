@@ -43,7 +43,14 @@ class FacilityStackDetail extends FacilityRecord
 		];
 	}
 
-	public function getImage()
+	public function getByStack($id)
+	{
+		return self::find()->where([
+			'buck_sheet_id' => $id,
+		])->one();
+	}
+
+	public function getImages()
 	{
 		return $this->hasMany(FacilityStackImage::className(), ['facility_stack_detail_id' => 'facility_stack_detail_id']);
 	}

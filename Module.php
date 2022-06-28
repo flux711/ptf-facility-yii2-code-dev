@@ -22,6 +22,11 @@ class Module extends \yii\base\Module implements \yii\base\BootstrapInterface
 			$this->id.'/stack/<id:[\w\-]+>/image' => 'facility/facility/image',
 			$this->id.'/stack/<id:[\w\-]+>/image/add' => 'facility/facility/add-stack-image',
 			$this->id.'/image/edit/<id:[\w\-]+>' => 'facility/facility/edit-stack-image',
+
+			$this->id.'/codepool/<code:[\w\-]+>/poolid/<poolid:[\w\-]+>' => 'facility/facility/code-valid',
+
+			$this->id.'/stack/<id:[\w\-]+>/' => 'facility/facility/fetch-stack-details',
+			$this->id.'/stack/<id:[\w\-]+>/images' => 'facility/facility/fetch-stack-images',
 		], false);
 	}
 }

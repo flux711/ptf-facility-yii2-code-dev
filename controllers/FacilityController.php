@@ -13,6 +13,8 @@ use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\rest\Controller;
+use yii\web\BadRequestHttpException;
+use yii\web\Response;
 
 class FacilityController extends Controller
 {
@@ -232,6 +234,68 @@ class FacilityController extends Controller
 		$model->setConfig($config);
 
 		return $this->render('editCodepool', ['model' => $model]);
+	}
+
+	public function actionCodeValid()
+	{
+		Yii::$app->response->format = Response::FORMAT_JSON;
+		$request = Yii::$app->request;
+
+		$code = $request->queryParams['code'];
+		$poolid = $request->queryParams['poolid'];
+
+		$codepool = FacilityCodePool::find()->where([
+			'facility_code_pool_id' => $poolid,
+		])->one();
+		if (!$codepool)
+			return ['valid' => false];
+		preg_match("/".$codepool->regex."/", $code, $matches);
+		return ['valid' => count($matches) > 0];
+	}
+
+	public function actionFetchStackImages()
+	{
+		Yii::$app->response->format = Response::FORMAT_JSON;
+		$request = Yii::$app->request;
+
+		$id = $request->queryParams['id'];
+
+		$stack = FacilityStackDetail::getByStack($id);
+		if (!$stack)
+			throw new BadRequestHttpException("No stack for this bucksheet found!");
+
+		$images = [];
+		foreach($stack->images as $image) {
+			array_push($images, [
+				"Articlenumber" => $image->part_number,
+				"Referenz" => $image->reference
+			]);
+		}
+
+		$result['Result']['Rows'] = $images;
+		return $result;
+	}
+
+	public function actionFetchStackDetails()
+	{
+		Yii::$app->response->format = Response::FORMAT_JSON;
+		$request = Yii::$app->request;
+
+		$id = $request->queryParams['id'];
+
+		$stack = FacilityStackDetail::getByStack($id);
+		if (!$stack)
+			throw new BadRequestHttpException("No stack for this bucksheet found!");
+		$details = [
+			"StackOpenQuantity" => 100000,
+			"Articlenumber" => $stack->part_number,
+			"ProductionOrdersNumber" => $stack->production_order_id,
+			"StackOpen" => true,
+			"StackTest" => true
+		];
+
+		$result['Result']['Rows'] = $details;
+		return $result;
 	}
 
 }
