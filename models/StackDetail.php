@@ -1,11 +1,11 @@
 <?php
 
-namespace flux711\yii2\facility_code_dev\models;
+namespace rhea\facility;
 
-use flux711\yii2\facility_code_dev\common\models\FacilityRecord;
+use rhea\facility\common\models\FacilityRecord;
 use Yii;
 
-class FacilityStackDetail extends FacilityRecord
+class StackDetail extends FacilityRecord
 {
 	public static function tableName()
 	{
@@ -52,6 +52,6 @@ class FacilityStackDetail extends FacilityRecord
 
 	public function getImages()
 	{
-		return $this->hasMany(FacilityStackImage::className(), ['facility_stack_detail_id' => 'facility_stack_detail_id']);
+		return $this->hasMany(StackImage::className(), ['facility_stack_detail_id' => 'facility_stack_detail_id']);
 	}
 }

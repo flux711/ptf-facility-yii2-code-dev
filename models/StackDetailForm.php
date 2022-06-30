@@ -1,10 +1,10 @@
 <?php
 
-namespace flux711\yii2\facility_code_dev\models;
+namespace rhea\facility;
 
 use yii\base\Model;
 
-class FacilityStackDetailForm extends Model
+class StackDetailForm extends Model
 {
 	public $production_order_id;
 	public $buck_sheet_id;
@@ -43,7 +43,7 @@ class FacilityStackDetailForm extends Model
 			return "Input validation failed!";
 		}
 
-		$stackdetail = FacilityStackDetail::find()->where([
+		$stackdetail = StackDetail::find()->where([
 			'buck_sheet_id' => $this->buck_sheet_id,
 		])->one();
 		if ($stackdetail != null)
@@ -59,7 +59,7 @@ class FacilityStackDetailForm extends Model
 	 */
 	public function create()
 	{
-		$stackdetail = new FacilityStackDetail();
+		$stackdetail = new StackDetail();
 		$stackdetail->production_order_id = $this->production_order_id;
 		$stackdetail->buck_sheet_id = $this->buck_sheet_id;
 		$stackdetail->part_number = $this->part_number;

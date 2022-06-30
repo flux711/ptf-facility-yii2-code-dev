@@ -1,11 +1,12 @@
 {
-  "name": "flux711/facility-code-dev",
+  "name": "phytec/facility",
   "description": "Facility data extension for rhea",
   "keywords": [
     "yii2",
     "facility",
     "extension",
-    "rhea"
+    "rhea",
+    "phytec"
   ],
   "homepage": "http://www.phytec.de/",
   "type": "rhea-extension",
@@ -21,7 +22,7 @@
   },
   "autoload": {
     "psr-4": {
-      "flux711\\yii2\\facility_code_dev\\": ""
+      "rhea\\facility": "rhea\\facility\\models"
     }
   }
 }

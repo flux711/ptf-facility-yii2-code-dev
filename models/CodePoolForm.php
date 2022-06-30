@@ -1,10 +1,10 @@
 <?php
 
-namespace flux711\yii2\facility_code_dev\models;
+namespace rhea\facility;
 
 use yii\base\Model;
 
-class FacilityCodePoolForm extends Model
+class CodePoolForm extends Model
 {
 	public $name;
 	public $regex;
@@ -38,7 +38,7 @@ class FacilityCodePoolForm extends Model
 			return "Input validation failed!";
 		}
 
-		$codepool = FacilityCodePool::find()->where([
+		$codepool = CodePool::find()->where([
 			'name' => $this->name
 		])->one();
 		if ($codepool)
@@ -54,7 +54,7 @@ class FacilityCodePoolForm extends Model
 	 */
 	public function create()
 	{
-		$codepool = new FacilityCodePool();
+		$codepool = new CodePool();
 		$codepool->name = $this->name;
 		$codepool->regex = $this->regex;
 

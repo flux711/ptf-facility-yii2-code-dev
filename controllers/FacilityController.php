@@ -1,13 +1,13 @@
 <?php
 
-namespace flux711\yii2\facility_code_dev\controllers;
+namespace rhea\facility\controllers;
 
-use flux711\yii2\facility_code_dev\models\FacilityCodePool;
-use flux711\yii2\facility_code_dev\models\FacilityCodePoolForm;
-use flux711\yii2\facility_code_dev\models\FacilityStackDetail;
-use flux711\yii2\facility_code_dev\models\FacilityStackDetailForm;
-use flux711\yii2\facility_code_dev\models\FacilityStackImage;
-use flux711\yii2\facility_code_dev\models\FacilityStackImageForm;
+use rhea\facility\CodePool;
+use rhea\facility\CodePoolForm;
+use rhea\facility\StackDetail;
+use rhea\facility\StackDetailForm;
+use rhea\facility\StackImage;
+use rhea\facility\StackImageForm;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -81,7 +81,7 @@ class FacilityController extends Controller
 	public function actionStack()
 	{
 		$payload = [];
-		$query = FacilityStackDetail::find();
+		$query = StackDetail::find();
 		$provider = new ActiveDataProvider([
 			'query' => $query,
 			'pagination' => [
@@ -98,7 +98,7 @@ class FacilityController extends Controller
 		$request = Yii::$app->request;
 		$id = $request->queryParams['id'];
 
-		$query = FacilityStackImage::find();
+		$query = StackImage::find();
 		$provider = new ActiveDataProvider([
 			'query' => $query->filterWhere(
 				['facility_stack_detail_id' => $id]
@@ -115,7 +115,7 @@ class FacilityController extends Controller
 
 	public function actionCodepool()
 	{
-		$query = FacilityCodePool::find();
+		$query = CodePool::find();
 		$provider = new ActiveDataProvider([
 			'query' => $query,
 			'pagination' => [
@@ -130,7 +130,7 @@ class FacilityController extends Controller
 
 	public function actionAddStackDetail()
 	{
-		$model = new FacilityStackDetailForm();
+		$model = new StackDetailForm();
 		if ($model->load(Yii::$app->request->post())) {
 			$verification = $model->verify();
 			if ($verification)
@@ -148,11 +148,11 @@ class FacilityController extends Controller
 	{
 		$request = Yii::$app->request;
 		$id = $request->queryParams['id'];
-		$config = FacilityStackDetail::findOne($id);
+		$config = StackDetail::findOne($id);
 
-		$model = new FacilityStackDetailForm();
+		$model = new StackDetailForm();
 
-		if ($request->post('FacilityStackDetailForm') && $model->load($request->post()) && $model->update($config)) {
+		if ($request->post('StackDetailForm') && $model->load($request->post()) && $model->update($config)) {
 			Yii::$app->session->setFlash('success', 'Stack updated!');
 			return $this->redirect(['/facility/stack']);
 		}
@@ -166,7 +166,7 @@ class FacilityController extends Controller
 	{
 		$request = Yii::$app->request;
 		$id = $request->queryParams['id'];
-		$model = new FacilityStackImageForm();
+		$model = new StackImageForm();
 
 		$model->facility_stack_detail_id = $id;
 		if ($model->load($request->post())) {
@@ -186,11 +186,11 @@ class FacilityController extends Controller
 	{
 		$request = Yii::$app->request;
 		$id = $request->queryParams['id'];
-		$config = FacilityStackImage::findOne($id);
+		$config = StackImage::findOne($id);
 
-		$model = new FacilityStackImageForm();
+		$model = new StackImageForm();
 
-		if ($request->post('FacilityStackImageForm') && $model->load($request->post()) && $model->update($config)) {
+		if ($request->post('StackImageForm') && $model->load($request->post()) && $model->update($config)) {
 			Yii::$app->session->setFlash('success', 'Stack image updated!');
 			return $this->redirect(['/facility/stack/'.$config->facility_stack_detail_id.'/image']);
 		}
@@ -203,7 +203,7 @@ class FacilityController extends Controller
 	public function actionAddCodepool()
 	{
 		$request = Yii::$app->request;
-		$model = new FacilityCodePoolForm();
+		$model = new CodePoolForm();
 
 		if ($model->load($request->post())) {
 			$verification = $model->verify();
@@ -222,11 +222,11 @@ class FacilityController extends Controller
 	{
 		$request = Yii::$app->request;
 		$id = $request->queryParams['id'];
-		$config = FacilityCodePool::findOne($id);
+		$config = CodePool::findOne($id);
 
-		$model = new FacilityCodePoolForm();
+		$model = new CodePoolForm();
 
-		if ($request->post('FacilityCodePoolForm') && $model->load($request->post()) && $model->update($config)) {
+		if ($request->post('CodePoolForm') && $model->load($request->post()) && $model->update($config)) {
 			Yii::$app->session->setFlash('success', 'Code pool updated!');
 			return $this->redirect(['/facility/codepool']);
 		}
@@ -236,23 +236,6 @@ class FacilityController extends Controller
 		return $this->render('editCodepool', ['model' => $model]);
 	}
 
-	public function actionCodeValid()
-	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
-		$request = Yii::$app->request;
-
-		$code = $request->queryParams['code'];
-		$poolid = $request->queryParams['poolid'];
-
-		$codepool = FacilityCodePool::find()->where([
-			'facility_code_pool_id' => $poolid,
-		])->one();
-		if (!$codepool)
-			return ['valid' => false];
-		preg_match("/".$codepool->regex."/", $code, $matches);
-		return ['valid' => count($matches) > 0];
-	}
-
 	public function actionFetchStackImages()
 	{
 		Yii::$app->response->format = Response::FORMAT_JSON;
@@ -260,7 +243,7 @@ class FacilityController extends Controller
 
 		$id = $request->queryParams['id'];
 
-		$stack = FacilityStackDetail::getByStack($id);
+		$stack = StackDetail::getByStack($id);
 		if (!$stack)
 			throw new BadRequestHttpException("No stack for this bucksheet found!");
 
@@ -283,7 +266,7 @@ class FacilityController extends Controller
 
 		$id = $request->queryParams['id'];
 
-		$stack = FacilityStackDetail::getByStack($id);
+		$stack = StackDetail::getByStack($id);
 		if (!$stack)
 			throw new BadRequestHttpException("No stack for this bucksheet found!");
 		$details = [

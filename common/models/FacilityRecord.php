@@ -1,6 +1,6 @@
 <?php
 
-namespace flux711\yii2\facility_code_dev\common\models;
+namespace rhea\facility\common\models;
 
 use Yii;
 use yii\db\ActiveRecord;

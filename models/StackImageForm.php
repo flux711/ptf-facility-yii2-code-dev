@@ -1,10 +1,10 @@
 <?php
 
-namespace flux711\yii2\facility_code_dev\models;
+namespace rhea\facility;
 
 use yii\base\Model;
 
-class FacilityStackImageForm extends Model
+class StackImageForm extends Model
 {
 	public $facility_stack_detail_id;
 	public $part_number;
@@ -22,7 +22,7 @@ class FacilityStackImageForm extends Model
 			['facility_stack_detail_id', 'required', 'on' => self::SCENARIO_CREATE],
 			['facility_stack_detail_id', 'integer', 'min' => 1, 'max' => 10],
 			['facility_stack_detail_id', 'exist',
-				'targetClass' => FacilityStackDetail::class,
+				'targetClass' => StackDetail::class,
 				'targetAttribute' => ['facility_stack_detail_id' => 'facility_stack_detail_id'],
 				'message' => 'Facility stack detail ID {value} does not exist.'
 			],
@@ -48,7 +48,7 @@ class FacilityStackImageForm extends Model
 			return "Input validation failed!";
 		}
 
-		$stackimage = FacilityStackImage::find()->where(
+		$stackimage = StackImage::find()->where(
 			['and',
 				['facility_stack_detail_id' => $this->facility_stack_detail_id],
 				['part_number' => $this->part_number]
@@ -66,7 +66,7 @@ class FacilityStackImageForm extends Model
 	 */
 	public function create()
 	{
-		$stackimage = new FacilityStackImage();
+		$stackimage = new StackImage();
 		$stackimage->facility_stack_detail_id = $this->facility_stack_detail_id;
 		$stackimage->part_number = $this->part_number;
 		$stackimage->reference = $this->reference;

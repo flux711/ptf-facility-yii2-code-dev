@@ -1,11 +1,11 @@
 <?php
 
-namespace flux711\yii2\facility_code_dev\models;
+namespace rhea\facility;
 
-use flux711\yii2\facility_code_dev\common\models\FacilityRecord;
+use rhea\facility\common\models\FacilityRecord;
 use Yii;
 
-class FacilityStackImage extends FacilityRecord
+class StackImage extends FacilityRecord
 {
 	public static function tableName()
 	{
